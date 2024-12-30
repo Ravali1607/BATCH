@@ -1,0 +1,68 @@
+<core:FragmentDefinition xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core= "sap.ui.core"
+xmlns= "sap.m"
+>
+    <Dialog id="addDialog" >
+    <customHeader>
+    <Bar> 
+        <contentLeft><Text text="Add Employee"></Text></contentLeft>
+        <contentRight><Button icon="sap-icon://add" press="add"></Button></contentRight>
+    </Bar>
+    </customHeader>
+        
+        <form:SimpleForm >
+            <form:content>
+                <Label text="ID"></Label>
+                <Input id="input1"></Input>
+                <Label text="Name"></Label>
+                <Input id="input2"></Input>
+                <Label text="Blood Group"></Label>
+                <Input id="input3"></Input>
+                <Label text="Designation"></Label>
+                <Input id="input4"></Input>
+                <Label text="Email"></Label>
+                <Input id="input5"></Input>
+                <Label text="Contact"></Label>
+                <Input id="input6"></Input>
+                <Label text="Address"></Label>
+                <Input id="input7"></Input>
+                <Label text="Branch"></Label>
+                <Input id="input8"></Input>
+            </form:content>
+        </form:SimpleForm>
+
+        <Table id="tempData" items="{oTemp>/tempEmp}">
+        <columns>
+            <Column ><Text text="ID"></Text></Column>
+            <Column ><Text text="NAME"></Text></Column>
+            <Column ><Text text="BLOOD GROUP"></Text></Column>
+            <Column ><Text text="DESIGNATION"></Text></Column>
+            <Column ><Text text="EMAIL"></Text></Column>
+            <Column ><Text text="CONTACT"></Text></Column>
+            <Column ><Text text="ADDRESS"></Text></Column>
+            <Column ><Text text="BRANCH"></Text></Column>
+        </columns>
+        <items>
+            <ColumnListItem >
+            <cells>
+                <Text text="{EMP_ID}"></Text>
+                <Text text="{EMP_NAME}"></Text>
+                <Text text="{EMP_BLODD_GRP}"></Text>
+                <Text text="{EMP_DESIG}"></Text>
+                <Text text="{EMP_EMAIL}"></Text>
+                <Text text="{EMP_CONT}"></Text>
+                <Text text="{EMP_ADDRESS}"></Text>
+                <Text text="{EMP_BRANCH}"></Text>
+            </cells>
+            </ColumnListItem>
+        </items>
+        </Table>
+        <footer>
+            <Toolbar >
+                <ToolbarSpacer ></ToolbarSpacer>
+                <Button text="Submit" icon="sap-icon://save" press="SaveEmp"></Button>
+                <Button text="Reset" icon="sap-icon://refresh" press="resetEmp"></Button>
+                <Button text="Cancel" icon="sap-icon://decline" press="closeEmp"></Button>
+            </Toolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

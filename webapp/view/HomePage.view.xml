@@ -1,0 +1,40 @@
+<mvc:View controllerName="employee.controller.HomePage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" showHeader="false" title="{i18n>title}">
+    <content>
+        <Bar >
+            <contentMiddle><Text text="EMPLOYEE INFORMATION"></Text></contentMiddle>
+            <contentRight><Button icon="sap-icon://add" press="onAddEmp"></Button></contentRight>
+        </Bar>
+        <Table id="empTable" items="{/EMPLOYEE}">
+            <columns>
+                <Column ><Text text="ID"></Text></Column>
+                <Column ><Text text="NAME"></Text></Column>
+                <Column ><Text text="BLOOD GROUP"></Text></Column>
+                <Column ><Text text="DESIGNATION"></Text></Column>
+                <Column ><Text text="EMAIL"></Text></Column>
+                <Column ><Text text="CONTACT"></Text></Column>
+                <Column ><Text text="ADDRESS"></Text></Column>
+                <Column ><Text text="BRANCH"></Text></Column>
+                <Column ><Text text="Action"></Text></Column>
+            </columns>
+            <items>
+            <ColumnListItem >
+            <cells>
+                <Text text="{EMP_ID}"></Text>
+                <Text text="{EMP_NAME}"></Text>
+                <Text text="{EMP_BLODD_GRP}"></Text>
+                <Text text="{EMP_DESIG}"></Text>
+                <Text text="{EMP_EMAIL}"></Text>
+                <Text text="{EMP_CONT}"></Text>
+                <Text text="{EMP_ADDRESS}"></Text>
+                <Text text="{EMP_BRANCH}"></Text>
+                <Button icon="sap-icon://delete" press="onDeleteEmp"></Button>
+            </cells>
+            </ColumnListItem>
+            </items>
+        </Table>
+    </content>
+    </Page>
+</mvc:View>
