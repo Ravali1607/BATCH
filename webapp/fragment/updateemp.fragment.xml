@@ -1,0 +1,52 @@
+<core:FragmentDefinition xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core= "sap.ui.core"
+xmlns= "sap.m"
+>
+    <Dialog id="updateDialog" title="Update Employee">
+        <Table id="updateTable" items="{/tempEmployees}">
+        <columns>
+            <Column ><Text text="ID" id="updateinput1"></Text></Column>
+                <Column ><Text text="NAME" id="updateinput2"></Text></Column>
+                <Column ><Text text="BLOOD GROUP" id="updateinput3"></Text></Column>
+                <Column ><Text text="DESIGNATION" id="updateinput4"></Text></Column>
+                <Column ><Text text="EMAIL" id="updateinput5"></Text></Column>
+                <Column ><Text text="CONTACT" id="updateinput6"></Text></Column>
+                <Column ><Text text="ADDRESS" id="updateinput7"></Text></Column>
+                <Column ><Text text="BRANCH" id="updateinput8"></Text></Column>
+        </columns>
+        <items>
+            <ColumnListItem >
+            <cells>
+                <Text text="{TemporaryModel>/EMP_ID}"></Text>
+                <Text text="{TemporaryModel>/EMP_NAME}"></Text>
+                <Text text="{TemporaryModel>/EMP_BLODD_GRP}"></Text>
+                <Text text="{TemporaryModel>/EMP_DESIG}"></Text>
+                <Text text="{TemporaryModel>/EMP_EMAIL}"></Text>
+                <Text text="{TemporaryModel>/EMP_CONT}"></Text>
+                <Text text="{TemporaryModel>/EMP_ADDRESS}"></Text>
+                <Text text="{TemporaryModel>/EMP_BRANCH}"></Text>
+            </cells>
+            </ColumnListItem>
+        </items>
+        </Table>
+        <!-- <form:SimpleForm>
+            <form:content>
+                <Label text="ID"></Label>
+                <Input id="updateinput1"></Input>
+                <Label text="Name"></Label>
+                <Input id="updateinput2"></Input>
+                <Label text="Blood Group"></Label>
+                <Input id="updateinput3"></Input>
+                <Label text="Designation"></Label>
+                <Input id="updateinput4"></Input>
+                <Label text="Email"></Label>
+                <Input id="updateinput5"></Input>
+                <Label text="Contact"></Label>
+                <Input id="updateinput6"></Input>
+                <Label text="Address"></Label>
+                <Input id="updateinput7"></Input>
+                <Label text="Branch"></Label>
+                <Input id="updateinput8"></Input>
+            </form:content>
+        </form:SimpleForm> -->
+    </Dialog>
+</core:FragmentDefinition>

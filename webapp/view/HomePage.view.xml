@@ -5,9 +5,12 @@
     <content>
         <Bar >
             <contentMiddle><Text text="EMPLOYEE INFORMATION"></Text></contentMiddle>
-            <contentRight><Button icon="sap-icon://add" press="onAddEmp"></Button></contentRight>
+            <contentRight><Button icon="sap-icon://add-employee" press="onAddEmp" text="Add"></Button>
+                <Button icon="sap-icon://user-edit" press="onUpdateEmp" text="Modify"></Button>
+                <Button icon="sap-icon://clear-all" press="onDeleteEmp" text="Delete"></Button>
+            </contentRight>
         </Bar>
-        <Table id="empTable" items="{/EMPLOYEE}">
+        <Table id="empTable" items="{/EMPLOYEE}" mode="MultiSelect" selectionChange="onSelectionChange">
             <columns>
                 <Column ><Text text="ID"></Text></Column>
                 <Column ><Text text="NAME"></Text></Column>
