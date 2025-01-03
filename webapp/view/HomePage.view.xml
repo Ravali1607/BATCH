@@ -1,16 +1,43 @@
-<mvc:View controllerName="employee.controller.HomePage"
+<mvc:View xmlns:core="sap.ui.core" controllerName="employee.controller.HomePage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" showHeader="false" title="{i18n>title}">
-    <content>
+    <Page id="page" title="{i18n>title}">
+    <subHeader>
+        <Toolbar >
+            <SearchField liveChange="searchName" suggest="onSuggest"></SearchField>
+        </Toolbar>
+        </subHeader>
+         <content>
         <Bar >
-            <contentMiddle><Text text="EMPLOYEE INFORMATION"></Text></contentMiddle>
+            <contentLeft>
+                <ComboBox items="{path : '/EMPLOYEE'
+                }" 
+                selectionChange="onDesignation" id="comboBox1" showClearIcon="true" >
+                    <items >
+                        <core:Item key="{EMP_ID}" text="{EMP_DESIG}"></core:Item>
+                    </items>
+                </ComboBox>
+                <ComboBox items="{path : '/EMPLOYEE'
+                }" 
+                selectionChange="onBranch" id="comboBox2" showClearIcon="true" >
+                    <items >
+                        <core:Item key="{EMP_ID}" text="{EMP_BRANCH}"></core:Item>
+                    </items>
+                </ComboBox>
+                <ComboBox items="{path : '/EMPLOYEE'
+                }" 
+                selectionChange="onBloodGrp" id="comboBox3" showClearIcon="true" >
+                    <items >
+                        <core:Item key="{EMP_ID}" text="{EMP_BLODD_GRP}"></core:Item>
+                    </items>
+                </ComboBox>
+            </contentLeft>
             <contentRight><Button icon="sap-icon://add-employee" press="onAddEmp" text="Add"></Button>
                 <Button icon="sap-icon://user-edit" press="onUpdateEmp" text="Modify"></Button>
-                <Button icon="sap-icon://clear-all" press="onDeleteEmp" text="Delete"></Button>
+                <Button icon="sap-icon://clear-all" press="onDeleteEmp1" text="Delete"></Button>
             </contentRight>
         </Bar>
-        <Table id="empTable" items="{/EMPLOYEE}" mode="MultiSelect" selectionChange="onSelectionChange">
+        <Table id="empTable" items="{/EMPLOYEE}" mode="MultiSelect">
             <columns>
                 <Column ><Text text="ID"></Text></Column>
                 <Column ><Text text="NAME"></Text></Column>
@@ -25,14 +52,14 @@
             <items>
             <ColumnListItem >
             <cells>
-                <Text text="{EMP_ID}"></Text>
-                <Text text="{EMP_NAME}"></Text>
-                <Text text="{EMP_BLODD_GRP}"></Text>
-                <Text text="{EMP_DESIG}"></Text>
-                <Text text="{EMP_EMAIL}"></Text>
-                <Text text="{EMP_CONT}"></Text>
-                <Text text="{EMP_ADDRESS}"></Text>
-                <Text text="{EMP_BRANCH}"></Text>
+                <Text text="{EMP_ID}" />
+                <Text text="{EMP_NAME}" />
+                <Text text="{EMP_BLODD_GRP}" />
+                <Text text="{EMP_DESIG}" />
+                <Text text="{EMP_EMAIL}" />
+                <Text text="{EMP_CONT}" />
+                <Text text="{EMP_ADDRESS}" />
+                <Text text="{EMP_BRANCH}"/>
                 <Button icon="sap-icon://delete" press="onDeleteEmp"></Button>
             </cells>
             </ColumnListItem>

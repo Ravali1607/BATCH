@@ -28,6 +28,32 @@ xmlns= "sap.m"
                 <Input id="input8"></Input>
             </form:content>
         </form:SimpleForm>
+        <Table id="addTable" items="{/tempEmployees}">
+        <columns>
+            <Column ><Text text="ID" id="addinput1"></Text></Column>
+                <Column ><Text text="NAME" id="addinput2"></Text></Column>
+                <Column ><Text text="BLOOD GROUP" id="addinput3"></Text></Column>
+                <Column ><Text text="DESIGNATION" id="addinput4"></Text></Column>
+                <Column ><Text text="EMAIL" id="addinput5"></Text></Column>
+                <Column ><Text text="CONTACT" id="addinput6"></Text></Column>
+                <Column ><Text text="ADDRESS" id="addinput7"></Text></Column>
+                <Column ><Text text="BRANCH" id="addinput8"></Text></Column>
+        </columns>
+        <items>
+            <ColumnListItem >
+            <cells>
+                <Text text="{EMP_ID}" />
+                <Text text="{EMP_NAME}" />
+                <Text text="{EMP_BLODD_GRP}" />
+                <Text text="{EMP_DESIG}" />
+                <Text text="{EMP_EMAIL}" />
+                <Text text="{EMP_CONT}" />
+                <Text text="{EMP_ADDRESS}" />
+                <Text text="{EMP_BRANCH}"/>
+            </cells>
+            </ColumnListItem>
+        </items>
+        </Table>
         <footer>
             <Toolbar>
                 <ToolbarSpacer ></ToolbarSpacer>

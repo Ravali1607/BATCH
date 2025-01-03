@@ -16,37 +16,23 @@ xmlns= "sap.m"
         <items>
             <ColumnListItem >
             <cells>
-                <Text text="{TemporaryModel>/EMP_ID}"></Text>
-                <Text text="{TemporaryModel>/EMP_NAME}"></Text>
-                <Text text="{TemporaryModel>/EMP_BLODD_GRP}"></Text>
-                <Text text="{TemporaryModel>/EMP_DESIG}"></Text>
-                <Text text="{TemporaryModel>/EMP_EMAIL}"></Text>
-                <Text text="{TemporaryModel>/EMP_CONT}"></Text>
-                <Text text="{TemporaryModel>/EMP_ADDRESS}"></Text>
-                <Text text="{TemporaryModel>/EMP_BRANCH}"></Text>
+                <Input value="{EMP_ID}" />
+                <Input value="{EMP_NAME}" />
+                <Input value="{EMP_BLODD_GRP}" />
+                <Input value="{EMP_DESIG}" />
+                <Input value="{EMP_EMAIL}" />
+                <Input value="{EMP_CONT}" />
+                <Input value="{EMP_ADDRESS}" />
+                <Input value="{EMP_BRANCH}" />
             </cells>
             </ColumnListItem>
         </items>
         </Table>
-        <!-- <form:SimpleForm>
-            <form:content>
-                <Label text="ID"></Label>
-                <Input id="updateinput1"></Input>
-                <Label text="Name"></Label>
-                <Input id="updateinput2"></Input>
-                <Label text="Blood Group"></Label>
-                <Input id="updateinput3"></Input>
-                <Label text="Designation"></Label>
-                <Input id="updateinput4"></Input>
-                <Label text="Email"></Label>
-                <Input id="updateinput5"></Input>
-                <Label text="Contact"></Label>
-                <Input id="updateinput6"></Input>
-                <Label text="Address"></Label>
-                <Input id="updateinput7"></Input>
-                <Label text="Branch"></Label>
-                <Input id="updateinput8"></Input>
-            </form:content>
-        </form:SimpleForm> -->
+        <footer>
+            <Toolbar >
+                <ToolbarSpacer ></ToolbarSpacer>
+                <Button text="Save" icon="sap-icon://save" press="saveUpdate"></Button>
+            </Toolbar>
+        </footer>
     </Dialog>
 </core:FragmentDefinition>
