@@ -1,53 +1,59 @@
 <mvc:View xmlns:core="sap.ui.core" controllerName="employee.controller.HomePage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    <subHeader>
-        <Toolbar >
-            <SearchField liveChange="searchName" suggest="onSuggest"></SearchField>
-        </Toolbar>
+    <Page id="page" showHeader="false" title="{i18n>title}">
+        <subHeader>
+            <Bar>
+                <contentMiddle><Text text="EMPLOYEE INFORMATION"/></contentMiddle>
+            </Bar>
         </subHeader>
-         <content>
+        <Toolbar >
+            <SearchField liveChange="searchName" placeholder="Search using Name,Designation and ID" >
+            <SuggestionItem text="{EMP_NAME}" key="{EMP_ID}" />
+            </SearchField>
+        </Toolbar>
+        <content>
         <Bar >
             <contentLeft>
                 <ComboBox items="{path : '/EMPLOYEE'
                 }" 
-                selectionChange="onDesignation" id="comboBox1" showClearIcon="true" >
+                selectionChange="onDesignation" id="comboBox1" showClearIcon="true" placeholder="Designation" >
                     <items >
-                        <core:Item key="{EMP_ID}" text="{EMP_DESIG}"></core:Item>
+                        <core:Item key="{EMP_DESIG}" text="{EMP_DESIG}"></core:Item>
                     </items>
                 </ComboBox>
                 <ComboBox items="{path : '/EMPLOYEE'
                 }" 
-                selectionChange="onBranch" id="comboBox2" showClearIcon="true" >
+                selectionChange="onBranch" id="comboBox2" showClearIcon="true" placeholder="Branch">
                     <items >
-                        <core:Item key="{EMP_ID}" text="{EMP_BRANCH}"></core:Item>
+                        <core:Item key="{EMP_BRANCH}" text="{EMP_BRANCH}"></core:Item>
                     </items>
                 </ComboBox>
                 <ComboBox items="{path : '/EMPLOYEE'
                 }" 
-                selectionChange="onBloodGrp" id="comboBox3" showClearIcon="true" >
+                selectionChange="onBloodGrp" id="comboBox3" showClearIcon="true" placeholder="Blood Group">
                     <items >
-                        <core:Item key="{EMP_ID}" text="{EMP_BLODD_GRP}"></core:Item>
+                        <core:Item key="{EMP_BLODD_GRP}" text="{EMP_BLODD_GRP}"></core:Item>
                     </items>
                 </ComboBox>
             </contentLeft>
-            <contentRight><Button icon="sap-icon://add-employee" press="onAddEmp" text="Add"></Button>
+            <contentRight>
+                <Button icon="sap-icon://add-employee" press="onAddEmp" text="Add"></Button>
                 <Button icon="sap-icon://user-edit" press="onUpdateEmp" text="Modify"></Button>
-                <Button icon="sap-icon://clear-all" press="onDeleteEmp1" text="Delete"></Button>
+                <Button icon="sap-icon://delete" press="onDeleteEmp1" text="Delete"></Button>
             </contentRight>
         </Bar>
         <Table id="empTable" items="{/EMPLOYEE}" mode="MultiSelect">
             <columns>
-                <Column ><Text text="ID"></Text></Column>
-                <Column ><Text text="NAME"></Text></Column>
-                <Column ><Text text="BLOOD GROUP"></Text></Column>
-                <Column ><Text text="DESIGNATION"></Text></Column>
-                <Column ><Text text="EMAIL"></Text></Column>
-                <Column ><Text text="CONTACT"></Text></Column>
-                <Column ><Text text="ADDRESS"></Text></Column>
-                <Column ><Text text="BRANCH"></Text></Column>
-                <Column ><Text text="Action"></Text></Column>
+                <Column ><Text text="Id" ></Text></Column>
+                <Column ><Text text="Name"></Text></Column>
+                <Column ><Text text="Blood Group"></Text></Column>
+                <Column ><Text text="Designation"></Text></Column>
+                <Column ><Text text="Email"></Text></Column>
+                <Column ><Text text="Contact"></Text></Column>
+                <Column ><Text text="Address"></Text></Column>
+                <Column ><Text text="Branch"></Text></Column>
+                <!-- <Column ><Text text="Action"></Text></Column> -->
             </columns>
             <items>
             <ColumnListItem >
@@ -60,7 +66,7 @@
                 <Text text="{EMP_CONT}" />
                 <Text text="{EMP_ADDRESS}" />
                 <Text text="{EMP_BRANCH}"/>
-                <Button icon="sap-icon://delete" press="onDeleteEmp"></Button>
+                <!-- <Button icon="sap-icon://delete" press="onDeleteEmp"></Button> -->
             </cells>
             </ColumnListItem>
             </items>

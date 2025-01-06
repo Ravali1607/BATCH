@@ -5,39 +5,42 @@ xmlns= "sap.m"
     <customHeader>
     <Bar> 
         <contentLeft><Text text="Add Employee"></Text></contentLeft>
-        <contentRight><Button icon="sap-icon://add" press="add"></Button></contentRight>
+        
     </Bar>
     </customHeader>   
         <form:SimpleForm>
             <form:content>
-                <Label text="ID"></Label>
+                <Label text="ID" ></Label>
                 <Input id="input1"></Input>
                 <Label text="Name"></Label>
                 <Input id="input2"></Input>
                 <Label text="Blood Group"></Label>
-                <Input id="input3"></Input>
+                <Input id="input3" maxLength="3"></Input>
                 <Label text="Designation"></Label>
                 <Input id="input4"></Input>
                 <Label text="Email"></Label>
                 <Input id="input5"></Input>
                 <Label text="Contact"></Label>
-                <Input id="input6"></Input>
+                <Input id="input6" type="Number" maxLength="10"></Input>
                 <Label text="Address"></Label>
                 <Input id="input7"></Input>
                 <Label text="Branch"></Label>
                 <Input id="input8"></Input>
+                <Label ></Label>
+                <Button icon="sap-icon://add" press="add" width="50px"></Button>
             </form:content>
         </form:SimpleForm>
         <Table id="addTable" items="{/tempEmployees}">
         <columns>
-            <Column ><Text text="ID" id="addinput1"></Text></Column>
-                <Column ><Text text="NAME" id="addinput2"></Text></Column>
-                <Column ><Text text="BLOOD GROUP" id="addinput3"></Text></Column>
-                <Column ><Text text="DESIGNATION" id="addinput4"></Text></Column>
-                <Column ><Text text="EMAIL" id="addinput5"></Text></Column>
-                <Column ><Text text="CONTACT" id="addinput6"></Text></Column>
-                <Column ><Text text="ADDRESS" id="addinput7"></Text></Column>
-                <Column ><Text text="BRANCH" id="addinput8"></Text></Column>
+            <Column ><Text text="Id" id="addinput1"></Text></Column>
+                <Column ><Text text="Name" id="addinput2"></Text></Column>
+                <Column ><Text text="Blood Group" id="addinput3"></Text></Column>
+                <Column ><Text text="Designation" id="addinput4"></Text></Column>
+                <Column ><Text text="Email" id="addinput5"></Text></Column>
+                <Column ><Text text="Contact" id="addinput6"></Text></Column>
+                <Column ><Text text="Address" id="addinput7"></Text></Column>
+                <Column ><Text text="Branch" id="addinput8"></Text></Column>
+                <Column ></Column>
         </columns>
         <items>
             <ColumnListItem >
@@ -50,6 +53,7 @@ xmlns= "sap.m"
                 <Text text="{EMP_CONT}" />
                 <Text text="{EMP_ADDRESS}" />
                 <Text text="{EMP_BRANCH}"/>
+                <Button icon="sap-icon://delete" press="deleteTemp"></Button>
             </cells>
             </ColumnListItem>
         </items>

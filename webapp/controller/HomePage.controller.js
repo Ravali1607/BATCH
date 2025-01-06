@@ -31,23 +31,25 @@ sap.ui.define([
         add: function(){
             var oTempModel = that.getView().getModel("TemporaryModel");
             var eTemporary = oTempModel.getProperty("/tempEmployees");
-            var oNewEmp = {
-                EMP_ID : sap.ui.getCore().byId("input1").getValue(),
-                EMP_NAME : sap.ui.getCore().byId("input2").getValue(),
-                EMP_BLODD_GRP : sap.ui.getCore().byId("input3").getValue(),
-                EMP_DESIG : sap.ui.getCore().byId("input4").getValue(),
-                EMP_EMAIL : sap.ui.getCore().byId("input5").getValue(),
-                EMP_CONT : sap.ui.getCore().byId("input6").getValue(),
-                EMP_ADDRESS : sap.ui.getCore().byId("input7").getValue(),
-                EMP_BRANCH : sap.ui.getCore().byId("input8").getValue(),
-            }
-            console.log(oNewEmp);
-            eTemporary.push(oNewEmp);
-            console.log(eTemporary);
-            oTempModel.setProperty("/tempEmployees",eTemporary);
-            that.resetEmp();
-            var addTable = sap.ui.getCore().byId("addTable");
-            addTable.setModel(oTempModel);
+                var oNewEmp = {
+                    EMP_ID : sap.ui.getCore().byId("input1").getValue(),
+                    EMP_NAME : sap.ui.getCore().byId("input2").getValue(),
+                    EMP_BLODD_GRP : sap.ui.getCore().byId("input3").getValue(),
+                    EMP_DESIG : sap.ui.getCore().byId("input4").getValue(),
+                    EMP_EMAIL : sap.ui.getCore().byId("input5").getValue(),
+                    EMP_CONT : sap.ui.getCore().byId("input6").getValue(),
+                    EMP_ADDRESS : sap.ui.getCore().byId("input7").getValue(),
+                    EMP_BRANCH : sap.ui.getCore().byId("input8").getValue(),
+                }
+                console.log(oNewEmp);
+                // if(EMP_ID && EMP_NAME && EMP_BLODD_GRP && EMP_DESIG && EMP_EMAIL && EMP_CONT && EMP_ADDRESS && EMP_BRANCH){
+                eTemporary.push(oNewEmp);
+                console.log(eTemporary);
+                oTempModel.setProperty("/tempEmployees",eTemporary);
+                that.resetEmp();
+                var addTable = sap.ui.getCore().byId("addTable");
+                addTable.setModel(oTempModel);
+            // }
         },
         // <!----------- storing data into the view table ------------!>
         SaveEmp: function(){
@@ -82,6 +84,25 @@ sap.ui.define([
             that.addDialog.close();
             oTempModel.setProperty("/tempEmployees", []);
         },
+        // <!------------------- delete single employee in the fragment table ------------------!>
+        deleteTemp: function(oEvent){
+            var oTable = sap.ui.getCore().byId("addTable");
+            var oModel1 = oTable.getModel();
+            var oButton = oEvent.getSource();
+            var oContext = oButton.getBindingContext();
+            var sPath = oContext.getPath();
+            oModel1.remove(sPath,{
+                success:function()
+                {
+                     sap.m.MessageToast.show("Employee Deleted");
+                },
+                error:function(error)
+                {
+                    console.log(error)
+                    sap.m.MessageToast.show("Error");
+                }
+            })
+        },
         // <!---------  reset the input fields in the fragment  ----------!>
         resetEmp: function(){
             sap.ui.getCore().byId("input1").setValue("");
@@ -97,65 +118,6 @@ sap.ui.define([
         closeEmp:function(){
             that.addDialog.close();
         },
-        // <!------------- deleting single record -------------!>
-        onDeleteEmp: function(oEvent){
-            var oButton = oEvent.getSource();
-            var oContext = oButton.getBindingContext();
-            var oModel = that.getOwnerComponent().getModel();
-            var sPath = oContext.getPath();
-            oModel.remove(sPath,{
-                success:function()
-                {
-                     sap.m.MessageToast.show("Employee Deleted");
-                },
-                error:function(error)
-                {
-                    console.log(error)
-                    sap.m.MessageToast.show("Error");
-                }
-            })
-        },
-        // <----------- Updating a single Employee Information ---------->
-        // onUpdateEmp:function(){
-        //     var oTable = that.byId("empTable");
-        //     var oSelectedItem = oTable.getSelectedItem();
-        //     var oContext = oSelectedItem.getBindingContext();
-        //     var oEmployeeData = oContext.getObject();
-        //     if(!that.updateDialog){
-        //         that.updateDialog = sap.ui.xmlfragment("employee.fragment.updateemp",that);
-        //     }
-        //     that.updateDialog.open();
-        //     var oModel = new JSONModel(oEmployeeData);
-        //     that.updateDialog.setModel(oModel);
-        // },
-        // closeEmp1: function(){
-        //     that.updateDialog.close();
-        // },
-        // onUpdate: function(){
-        //     var updateEmp = {
-        //         EMP_ID :sap.ui.getCore().byId("updateinput1").getValue(),
-        //         EMP_NAME : sap.ui.getCore().byId("updateinput2").getValue(),
-        //         EMP_BLODD_GRP : sap.ui.getCore().byId("updateinput3").getValue(),
-        //         EMP_DESIG : sap.ui.getCore().byId("updateinput4").getValue(),
-        //         EMP_EMAIL : sap.ui.getCore().byId("updateinput5").getValue(),
-        //         EMP_CONT : sap.ui.getCore().byId("updateinput6").getValue(),
-        //         EMP_ADDRESS : sap.ui.getCore().byId("updateinput7").getValue(),
-        //         EMP_BRANCH : sap.ui.getCore().byId("updateinput8").getValue(),
-        //     }
-            
-        //     var oData = that.getOwnerComponent().getModel();
-        //     var updatePath = `/EMPLOYEE('${updateEmp.EMP_ID}')`
-        //     oData.update(updatePath, updateEmp,{
-        //         success: function (response) {
-        //             console.log(response);
-        //             sap.m.MessageToast.show("Employee Data updated");
-        //         },error: function (error) {
-        //             console.log(error)
-        //             sap.m.MessageToast.show("Error while updating the data");
-        //         }
-        //     })
-        //     that.updateDialog.close();
-        // }
         // <!--------- updating multiple employees ----------!>
         onUpdateEmp: function(){
             var oTempModel = that.getView().getModel("TemporaryModel");
@@ -206,6 +168,9 @@ sap.ui.define([
             }
             that.updateDialog.close();
         },
+        closeUpdate:function(){
+            that.updateDialog.close();
+        },
          // <!------- Deleting multiple employees --------------!>
          onDeleteEmp1: function(){
             var oTable = that.getView().byId("empTable");
@@ -232,14 +197,35 @@ sap.ui.define([
             // if (oSearch) {
             //     aFilter.push(new Filter("EMP_NAME", FilterOperator.Contains, oSearch));
             // }
-            if (oSearch) {
-                aFilter.push(new Filter({
-					path: "EMP_NAME",
-					operator: FilterOperator.Contains,
-					value1: oSearch,
-					caseSensitive: false
-				}));
-            }
+            // if (oSearch) {
+            //     aFilter.push(new Filter({
+			// 		path: "EMP_NAME",
+			// 		operator: FilterOperator.Contains,
+			// 		value1: oSearch,
+			// 		caseSensitive: false
+			// 	}));
+                    aFilter.push(new Filter({
+                        filters: [
+                          new Filter({
+                            path: 'EMP_DESIG',
+                            operator: FilterOperator.Contains,
+                            value1: oSearch,
+                            caseSensitive : false
+                          }),
+                          new Filter({
+                            path: 'EMP_NAME',
+                            operator: FilterOperator.Contains,
+                            value1: oSearch,
+                            caseSensitive : false
+                          }),
+                          new Filter({
+                            path : 'EMP_ID',
+                            operator: FilterOperator.Contains,
+                            value1: oSearch,
+                            caseSensitive: false
+                          })
+                        ],
+            }));
             var oList = that.getView().byId("empTable");
             var oBinding = oList.getBinding("items");
             oBinding.filter(aFilter);
@@ -260,9 +246,9 @@ sap.ui.define([
             var oDes = [];
             var oSelectedKey = that.byId("comboBox1").getSelectedKey();
             var oSelectedItem = that.byId("comboBox1").getSelectedItem();
-            if(oSelectedItem){
+            if(oSelectedKey){
                 oDes.push(new Filter({
-                    path : "EMP_ID",
+                    path : "EMP_DESIG",
                     operator : FilterOperator.EQ,
                     value1 : oSelectedKey
                 }));
@@ -271,33 +257,112 @@ sap.ui.define([
             var oBinding = oTable.getBinding("items");
             oBinding.filter(oDes);
         },
+        // <!------------------ COMBO BOX ON BRANCH ----------------------!>
         onBranch: function(){
             var oBranch = [];
-            var oSelectedKey = that.byId("comboBox2").getSelectedKey();
-            if(oSelectedKey){
+            var oSelectedKey1 = that.byId("comboBox1").getSelectedKey();
+            var oSelectedKey2= that.byId("comboBox2").getSelectedKey();
+            if(oSelectedKey2){
                 oBranch.push(new Filter({
-                    path : "EMP_ID",
-                    operator : FilterOperator.Contains,
+                    path : "EMP_BRANCH",
+                    operator : FilterOperator.EQ,
                     value1 : oSelectedKey
                 }));
             }
+            // if(oSelectedKey2){
+                oBranch.push(new Filter({
+                filters: [
+                  new Filter({
+                    path: 'EMP_DESIG',
+                    operator: FilterOperator.EQ,
+                    value1: oSelectedKey1
+                  }),
+                  new Filter({
+                    path: 'EMP_BRANCH',
+                    operator: FilterOperator.EQ,
+                    value1: oSelectedKey2
+                  })
+                ],
+                and: true
+              }))
             var oTable = that.getView().byId("empTable");
             var oBinding = oTable.getBinding("items");
             oBinding.filter(oBranch);
+            
         },
+        // <!------------------ COMBO BOX ON BLOOD GROUP ----------------------!>
         onBloodGrp: function(){
             var oBloodGrp = [];
             var oSelectedKey = that.byId("comboBox3").getSelectedKey();
+            var oTable = that.getView().byId("empTable");
             if(oSelectedKey){
                 oBloodGrp.push(new Filter({
-                    path : "EMP_ID",
-                    operator : FilterOperator.Contains,
+                    path: "EMP_BLODD_GRP",
+                    operator : FilterOperator.EQ,
                     value1 : oSelectedKey
                 }));
             }
-            var oTable = that.getView().byId("empTable");
             var oBinding = oTable.getBinding("items");
             oBinding.filter(oBloodGrp);
         },
+        // <!------------- deleting single record -------------!>
+        // onDeleteEmp: function(oEvent){
+        //     var oButton = oEvent.getSource();
+        //     var oContext = oButton.getBindingContext();
+        //     var oModel = that.getOwnerComponent().getModel();
+        //     var sPath = oContext.getPath();
+        //     oModel.remove(sPath,{
+        //         success:function()
+        //         {
+        //              sap.m.MessageToast.show("Employee Deleted");
+        //         },
+        //         error:function(error)
+        //         {
+        //             console.log(error)
+        //             sap.m.MessageToast.show("Error");
+        //         }
+        //     })
+        // },
+        // <----------- Updating a single Employee Information ---------->
+        // onUpdateEmp:function(){
+        //     var oTable = that.byId("empTable");
+        //     var oSelectedItem = oTable.getSelectedItem();
+        //     var oContext = oSelectedItem.getBindingContext();
+        //     var oEmployeeData = oContext.getObject();
+        //     if(!that.updateDialog){
+        //         that.updateDialog = sap.ui.xmlfragment("employee.fragment.updateemp",that);
+        //     }
+        //     that.updateDialog.open();
+        //     var oModel = new JSONModel(oEmployeeData);
+        //     that.updateDialog.setModel(oModel);
+        // },
+        // closeEmp1: function(){
+        //     that.updateDialog.close();
+        // },
+        // onUpdate: function(){
+        //     var updateEmp = {
+        //         EMP_ID :sap.ui.getCore().byId("updateinput1").getValue(),
+        //         EMP_NAME : sap.ui.getCore().byId("updateinput2").getValue(),
+        //         EMP_BLODD_GRP : sap.ui.getCore().byId("updateinput3").getValue(),
+        //         EMP_DESIG : sap.ui.getCore().byId("updateinput4").getValue(),
+        //         EMP_EMAIL : sap.ui.getCore().byId("updateinput5").getValue(),
+        //         EMP_CONT : sap.ui.getCore().byId("updateinput6").getValue(),
+        //         EMP_ADDRESS : sap.ui.getCore().byId("updateinput7").getValue(),
+        //         EMP_BRANCH : sap.ui.getCore().byId("updateinput8").getValue(),
+        //     }
+            
+        //     var oData = that.getOwnerComponent().getModel();
+        //     var updatePath = `/EMPLOYEE('${updateEmp.EMP_ID}')`
+        //     oData.update(updatePath, updateEmp,{
+        //         success: function (response) {
+        //             console.log(response);
+        //             sap.m.MessageToast.show("Employee Data updated");
+        //         },error: function (error) {
+        //             console.log(error)
+        //             sap.m.MessageToast.show("Error while updating the data");
+        //         }
+        //     })
+        //     that.updateDialog.close();
+        // }
     });
 });

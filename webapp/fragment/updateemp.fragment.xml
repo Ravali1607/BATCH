@@ -32,6 +32,7 @@ xmlns= "sap.m"
             <Toolbar >
                 <ToolbarSpacer ></ToolbarSpacer>
                 <Button text="Save" icon="sap-icon://save" press="saveUpdate"></Button>
+                <Button text="Close" icon="sap-icon://cancel" press="closeUpdate"></Button>
             </Toolbar>
         </footer>
     </Dialog>
