@@ -3,7 +3,8 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/Fragment",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
+    "sap/m/MessageBox"
 ], (Controller,JSONModel,Fragment,Filter,FilterOperator) => {
     "use strict";
     var that;
@@ -14,18 +15,65 @@ sap.ui.define([
             //     Employees : []
             // });
             // that.getView().setModel(oModel);
-            var oModel = that.getOwnerComponent().getModel();
-            that.getView().setModel(oModel);
+            var oDataModel = this.getOwnerComponent().getModel();
+            oDataModel.read("/EMPLOYEE", {
+                success: function (oData) {
+                    var uniqueDesignations = that.UniqueDesignations(oData.results);
+                    var uniqueBranch = that.UniqueBranch(oData.results);
+                    var uniqueBloodGrp = that.UniqueBloodGrp(oData.results);
+                    var designationModel = new JSONModel({
+                        DESIGNATIONS: uniqueDesignations,
+                        BRANCH : uniqueBranch,
+                        BLOODGROUP : uniqueBloodGrp
+                    });
+                    that.getView().setModel(designationModel, "designations");
+                    that.getView().setModel(designationModel,"branch");
+                    that.getView().setModel(designationModel,"bloodgroup");
+                },error: function (error) {
+                    console.log(error);
+                }
+            });
+            // var oModel = that.getOwnerComponent().getModel();
+            // that.getView().setModel(oModel);
             var oTempModel = new JSONModel({
                 tempEmployees : []
             });
             that.getView().setModel(oTempModel, "TemporaryModel");
+        },
+        UniqueDesignations: function (employeeData) {
+            var uniqueDesignations = [];
+            employeeData.forEach(function (employee) {
+                if (!uniqueDesignations.includes(employee.EMP_DESIG)) {
+                    uniqueDesignations.push(employee.EMP_DESIG);
+                }
+            });
+            return uniqueDesignations;
+        },
+        UniqueBranch : function(employeeData){
+            var uniqueBranch = [];
+            employeeData.forEach(function (employee) {
+                if (!uniqueBranch.includes(employee.EMP_BRANCH)) {
+                    uniqueBranch.push(employee.EMP_BRANCH);
+                }
+            });
+            return uniqueBranch;
+        },
+        UniqueBloodGrp : function(employeeData){
+            var uniqueBloodGrp = [];
+            employeeData.forEach(function (employee) {
+                if (!uniqueBloodGrp.includes(employee.EMP_BLODD_GRP)) {
+                    uniqueBloodGrp.push(employee.EMP_BLODD_GRP);
+                }
+            });
+            return uniqueBloodGrp;
         },
         onAddEmp: function(){
             if(!that.addDialog){
                 that.addDialog = sap.ui.xmlfragment("employee.fragment.addemp",that);
             }
             that.addDialog.open();
+            var oTempModel = that.getView().getModel("TemporaryModel");
+            oTempModel.setProperty("/tempEmployees", []);
         },
         // <!-------- storing multiple records in the array ----------!>
         add: function(){
@@ -42,14 +90,17 @@ sap.ui.define([
                     EMP_BRANCH : sap.ui.getCore().byId("input8").getValue(),
                 }
                 console.log(oNewEmp);
-                // if(EMP_ID && EMP_NAME && EMP_BLODD_GRP && EMP_DESIG && EMP_EMAIL && EMP_CONT && EMP_ADDRESS && EMP_BRANCH){
-                eTemporary.push(oNewEmp);
-                console.log(eTemporary);
-                oTempModel.setProperty("/tempEmployees",eTemporary);
-                that.resetEmp();
-                var addTable = sap.ui.getCore().byId("addTable");
-                addTable.setModel(oTempModel);
-            // }
+                if(oNewEmp.EMP_ID && oNewEmp.EMP_NAME && oNewEmp.EMP_BLODD_GRP && oNewEmp.EMP_DESIG && oNewEmp.EMP_EMAIL && oNewEmp.EMP_CONT && oNewEmp.EMP_ADDRESS && oNewEmp.EMP_BRANCH){
+                    eTemporary.push(oNewEmp);
+                    console.log(eTemporary);
+                    oTempModel.setProperty("/tempEmployees",eTemporary);
+                    that.resetEmp();
+                    var addTable = sap.ui.getCore().byId("addTable");
+                    addTable.setModel(oTempModel);
+                }
+                else{
+                    sap.m.MessageToast.show("Please fill all the fields");
+                }
         },
         // <!----------- storing data into the view table ------------!>
         SaveEmp: function(){
@@ -75,6 +126,7 @@ sap.ui.define([
                 oModel.create("/EMPLOYEE",e,{
                     success : function(response){
                         that.getOwnerComponent().getModel();
+                        sap.m.MessageToast.show("Employee Data added successfully...!");
                         console.log("success");
                     },error: function(error){
                         console.log(error);
@@ -86,22 +138,24 @@ sap.ui.define([
         },
         // <!------------------- delete single employee in the fragment table ------------------!>
         deleteTemp: function(oEvent){
-            var oTable = sap.ui.getCore().byId("addTable");
-            var oModel1 = oTable.getModel();
-            var oButton = oEvent.getSource();
-            var oContext = oButton.getBindingContext();
-            var sPath = oContext.getPath();
-            oModel1.remove(sPath,{
-                success:function()
-                {
-                     sap.m.MessageToast.show("Employee Deleted");
-                },
-                error:function(error)
-                {
-                    console.log(error)
-                    sap.m.MessageToast.show("Error");
-                }
-            })
+            var oTempModel = that.getView().getModel("TemporaryModel");
+            var eTemporary = oTempModel.getProperty("/tempEmployees");
+            var oContext = oEvent.getSource().getBindingContext().getObject();
+            var iIndex = eTemporary.findIndex(employee => employee.EMP_ID === oContext.EMP_ID);  
+            if (iIndex !== -1) {
+                sap.m.MessageBox.confirm("Are you sure you want to delete this record?", {
+                    title: "Confirm",
+                    onClose: function (sAction) {
+                        if (sAction === sap.m.MessageBox.Action.OK) {
+                            eTemporary.splice(iIndex, 1);  
+                            oTempModel.setProperty("/tempEmployees", eTemporary);  
+                            sap.m.MessageToast.show("Record deleted successfully!"); 
+                        }
+                    }
+                });
+            } else {
+                sap.m.MessageToast.show("Record not found!");
+            }
         },
         // <!---------  reset the input fields in the fragment  ----------!>
         resetEmp: function(){
@@ -124,21 +178,25 @@ sap.ui.define([
             var eTemporary = oTempModel.getProperty("/tempEmployees");
             var oTable = that.getView().byId("empTable");
             var oSelectedItem = oTable.getSelectedItems();
-            
+            var eTemporary = [];
+            if(oSelectedItem == 0){
+                sap.m.MessageToast.show("Select an employee to modify employee information");
+            }else{
             for(var i=0; i < oSelectedItem.length; i++){        
                 var item = oSelectedItem[i];
                 var oEmp = item.getBindingContext().getObject();
                 eTemporary.push(oEmp);
                 oTempModel.setProperty("/tempEmployees",eTemporary);
                 console.log(eTemporary);                                                //storing the selected details into the array
-            }
-            if(!that.updateDialog){
-                that.updateDialog = sap.ui.xmlfragment("employee.fragment.updateemp",that);
-                that.getView().addDependent(that.updateDialog);
-            }
-            var updateTable = sap.ui.getCore().byId("updateTable");     
-            updateTable.setModel(oTempModel);                                           //binding data into the fragment 
-            that.updateDialog.open();
+                }
+                if(!that.updateDialog){
+                    that.updateDialog = sap.ui.xmlfragment("employee.fragment.updateemp",that);
+                    that.getView().addDependent(that.updateDialog);
+                }
+                that.updateDialog.open();
+                var updateTable = sap.ui.getCore().byId("updateTable");     
+                updateTable.setModel(oTempModel);                                        //binding data into the fragment 
+            }                                     
         },
         saveUpdate:function(){
             var oTempModel = that.getView().getModel("TemporaryModel");
@@ -168,6 +226,7 @@ sap.ui.define([
             }
             that.updateDialog.close();
         },
+        // <!------------------ closing fragment 2 --------------------!>
         closeUpdate:function(){
             that.updateDialog.close();
         },
@@ -176,26 +235,30 @@ sap.ui.define([
             var oTable = that.getView().byId("empTable");
             var oSelectedItem = oTable.getSelectedItems();
             var oModel = that.getOwnerComponent().getModel();
+            if(oSelectedItem == 0){
+                sap.m.MessageToast.show("No employee is selected");
+            }else{
             for(var i=0; i < oSelectedItem.length; i++){
-                var item = oSelectedItem[i];
-                var oEmployeeData = item.getBindingContext().getObject();               //storing the selected employee details into oEmployeeData
-                var deletePath = `/EMPLOYEE('${oEmployeeData.EMP_ID}')`                 //fetching the employee id
-                oModel.remove(deletePath,{
-                    success: function(){
-                        sap.m.MessageToast.show("Employee Details deleted successfully..!")
-                        console.log("success");
-                    },error: function(error){
-                        console.log(error);
-                    }
-                })
+                    var item = oSelectedItem[i];
+                    var oEmployeeData = item.getBindingContext().getObject();               //storing the selected employee details into oEmployeeData
+                    var deletePath = `/EMPLOYEE('${oEmployeeData.EMP_ID}')`                 //fetching the employee id
+                    oModel.remove(deletePath,{
+                        success: function(){
+                            sap.m.MessageToast.show("Employee Details deleted successfully..!")
+                            console.log("success");
+                        },error: function(error){
+                            console.log(error);
+                        }
+                    })
+                }
             }
         },
         // <!---------------- Search Field -------------------!>
         searchName: function(oEvent){
             var aFilter = [];
             var oSearch = oEvent.getSource().getValue();
-            // if (oSearch) {
-            //     aFilter.push(new Filter("EMP_NAME", FilterOperator.Contains, oSearch));
+            // if (oSearch) {                                                                                   
+            //     aFilter.push(new Filter("EMP_NAME", FilterOperator.Contains, oSearch));                          //search using name 
             // }
             // if (oSearch) {
             //     aFilter.push(new Filter({
@@ -204,7 +267,7 @@ sap.ui.define([
 			// 		value1: oSearch,
 			// 		caseSensitive: false
 			// 	}));
-                    aFilter.push(new Filter({
+                    aFilter.push(new Filter({                                                           //search using name or id or designation
                         filters: [
                           new Filter({
                             path: 'EMP_DESIG',
@@ -229,81 +292,111 @@ sap.ui.define([
             var oList = that.getView().byId("empTable");
             var oBinding = oList.getBinding("items");
             oBinding.filter(aFilter);
-            // var oModel = that.getOwnerComponent().getModel();
-            // oModel.read("/EMPLOYEE",{
-            //     success : function(response){
-                    // var filteredNames = response.results.filter(name => name.EMP_NAME === oSearch)
-                    // var oFilteredModel = new sap.ui.model.json.JSONModel({
-                    //     items: filteredNames
-                    // });
-                    
-                // },error: function(error){
-                //     console.log(error);
-                // }
         },
-        // <!------------------ COMBO BOX ON DESIGNATION ----------------------!>
-        onDesignation: function(){
-            var oDes = [];
-            var oSelectedKey = that.byId("comboBox1").getSelectedKey();
-            var oSelectedItem = that.byId("comboBox1").getSelectedItem();
-            if(oSelectedKey){
-                oDes.push(new Filter({
+        // <!------------------ COMBO BOX ON DESIGNATION, BRANCH AND BLOOD GROUP ----------------------!>
+        ComboBox: function(){
+            var oCombo = [];
+            var oSelectedDesKey = that.byId("comboBoxDes").getSelectedKey();
+            var oSelectedKeyBranch = that.byId("comboBoxBranch").getSelectedKey();
+            var oSelectedKeyGrp = that.byId("comboBoxBloodGrp").getSelectedKey();
+            // var oSelectedItem = that.byId("comboBox1").getSelectedItem();
+            if(oSelectedDesKey){                                                            //SINGLE SELECTION
+                oCombo.push(new Filter({
                     path : "EMP_DESIG",
                     operator : FilterOperator.EQ,
-                    value1 : oSelectedKey
+                    value1 : oSelectedDesKey
                 }));
             }
-            var oTable = that.getView().byId("empTable");
-            var oBinding = oTable.getBinding("items");
-            oBinding.filter(oDes);
-        },
-        // <!------------------ COMBO BOX ON BRANCH ----------------------!>
-        onBranch: function(){
-            var oBranch = [];
-            var oSelectedKey1 = that.byId("comboBox1").getSelectedKey();
-            var oSelectedKey2= that.byId("comboBox2").getSelectedKey();
-            if(oSelectedKey2){
-                oBranch.push(new Filter({
+            if(oSelectedKeyBranch){
+                oCombo.push(new Filter({
                     path : "EMP_BRANCH",
                     operator : FilterOperator.EQ,
-                    value1 : oSelectedKey
+                    value1 : oSelectedKeyBranch
                 }));
             }
-            // if(oSelectedKey2){
-                oBranch.push(new Filter({
-                filters: [
-                  new Filter({
-                    path: 'EMP_DESIG',
-                    operator: FilterOperator.EQ,
-                    value1: oSelectedKey1
-                  }),
-                  new Filter({
-                    path: 'EMP_BRANCH',
-                    operator: FilterOperator.EQ,
-                    value1: oSelectedKey2
-                  })
-                ],
-                and: true
-              }))
-            var oTable = that.getView().byId("empTable");
-            var oBinding = oTable.getBinding("items");
-            oBinding.filter(oBranch);
-            
-        },
-        // <!------------------ COMBO BOX ON BLOOD GROUP ----------------------!>
-        onBloodGrp: function(){
-            var oBloodGrp = [];
-            var oSelectedKey = that.byId("comboBox3").getSelectedKey();
-            var oTable = that.getView().byId("empTable");
-            if(oSelectedKey){
-                oBloodGrp.push(new Filter({
-                    path: "EMP_BLODD_GRP",
+            if(oSelectedKeyGrp){
+                oCombo.push(new Filter({
+                    path : "EMP_BLODD_GRP",
                     operator : FilterOperator.EQ,
-                    value1 : oSelectedKey
+                    value1 : oSelectedKeyGrp
                 }));
             }
+            if(oSelectedDesKey && oSelectedKeyBranch){                                        //DOUBLE SELECTION
+                oCombo.push(new Filter({
+                        filters: [
+                          new Filter({
+                            path: 'EMP_DESIG',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedDesKey
+                          }),
+                          new Filter({
+                            path: 'EMP_BRANCH',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedKeyBranch
+                          })
+                        ],
+                        and: true
+                }))
+            }
+            if(oSelectedDesKey && oSelectedKeyGrp){
+                oCombo.push(new Filter({
+                        filters: [
+                          new Filter({
+                            path: 'EMP_DESIG',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedDesKey
+                          }),
+                          new Filter({
+                            path: 'EMP_BLODD_GRP',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedKeyGrp
+                          })
+                        ],
+                        and: true
+                }))
+            }
+            if(oSelectedKeyBranch && oSelectedKeyGrp){
+                oCombo.push(new Filter({
+                        filters: [
+                          new Filter({
+                            path: 'EMP_BRANCH',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedKeyBranch
+                          }),
+                          new Filter({
+                            path: 'EMP_BLODD_GRP',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedKeyGrp
+                          })
+                        ],
+                        and: true
+                }))
+            }
+            if(oSelectedDesKey && oSelectedKeyBranch && oSelectedKeyGrp){                   //TRIPLE SELECTION
+                oCombo.push(new Filter({
+                        filters: [
+                          new Filter({
+                            path: 'EMP_DESIG',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedDesKey
+                          }),
+                          new Filter({
+                            path: 'EMP_BRANCH',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedKeyBranch
+                          }),
+                          new Filter({
+                            path: 'EMP_BLODD_GRP',
+                            operator: FilterOperator.EQ,
+                            value1: oSelectedKeyGrp
+                          })
+                        ],
+                        and: true
+                      }))
+            }
+            var oTable = that.getView().byId("empTable");
             var oBinding = oTable.getBinding("items");
-            oBinding.filter(oBloodGrp);
+            oBinding.filter(oCombo);
         },
         // <!------------- deleting single record -------------!>
         // onDeleteEmp: function(oEvent){

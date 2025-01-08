@@ -15,25 +15,25 @@
         <content>
         <Bar >
             <contentLeft>
-                <ComboBox items="{path : '/EMPLOYEE'
+                <ComboBox items="{path : 'designations>/DESIGNATIONS'
                 }" 
-                selectionChange="onDesignation" id="comboBox1" showClearIcon="true" placeholder="Designation" >
+                selectionChange="ComboBox" id="comboBoxDes" showClearIcon="true" placeholder="Designation"  enabled="true" >
                     <items >
-                        <core:Item key="{EMP_DESIG}" text="{EMP_DESIG}"></core:Item>
+                        <core:Item key="{designations>}" text="{designations>}"></core:Item>
                     </items>
                 </ComboBox>
-                <ComboBox items="{path : '/EMPLOYEE'
+                <ComboBox items="{path : 'branch>/BRANCH'
                 }" 
-                selectionChange="onBranch" id="comboBox2" showClearIcon="true" placeholder="Branch">
+                selectionChange="ComboBox" id="comboBoxBranch" showClearIcon="true" placeholder="Branch">
                     <items >
-                        <core:Item key="{EMP_BRANCH}" text="{EMP_BRANCH}"></core:Item>
+                        <core:Item key="{branch>}" text="{branch>}"></core:Item>
                     </items>
                 </ComboBox>
-                <ComboBox items="{path : '/EMPLOYEE'
+                <ComboBox items="{path : 'bloodgroup>/BLOODGROUP'
                 }" 
-                selectionChange="onBloodGrp" id="comboBox3" showClearIcon="true" placeholder="Blood Group">
+                selectionChange="ComboBox" id="comboBoxBloodGrp" showClearIcon="true" placeholder="Blood Group">
                     <items >
-                        <core:Item key="{EMP_BLODD_GRP}" text="{EMP_BLODD_GRP}"></core:Item>
+                        <core:Item key="{bloodgroup>}" text="{bloodgroup>}"></core:Item>
                     </items>
                 </ComboBox>
             </contentLeft>
