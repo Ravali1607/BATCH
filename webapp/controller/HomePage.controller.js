@@ -1,11 +1,11 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
+    
     "sap/ui/core/Fragment",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox"
-], (Controller,JSONModel,Fragment,Filter,FilterOperator) => {
+], (Controller,JSONModel,Fragment,Filter,FilterOperator,MessageBox) => {
     "use strict";
     var that;
     return Controller.extend("employee.controller.HomePage", {
@@ -296,104 +296,111 @@ sap.ui.define([
         // <!------------------ COMBO BOX ON DESIGNATION, BRANCH AND BLOOD GROUP ----------------------!>
         ComboBox: function(){
             var oCombo = [];
-            var oSelectedDesKey = that.byId("comboBoxDes").getSelectedKey();
-            var oSelectedKeyBranch = that.byId("comboBoxBranch").getSelectedKey();
-            var oSelectedKeyGrp = that.byId("comboBoxBloodGrp").getSelectedKey();
+            var oSelectedDesKey = that.byId("comboBoxDes").getSelectedKeys();
+            var oSelectedKeyBranch = that.byId("comboBoxBranch").getSelectedKeys();
+            var oSelectedKeyGrp = that.byId("comboBoxBloodGrp").getSelectedKeys();
             // var oSelectedItem = that.byId("comboBox1").getSelectedItem();
-            if(oSelectedDesKey){                                                            //SINGLE SELECTION
-                oCombo.push(new Filter({
-                    path : "EMP_DESIG",
-                    operator : FilterOperator.EQ,
-                    value1 : oSelectedDesKey
-                }));
+            if(oSelectedDesKey){ 
+                    oSelectedDesKey.forEach(function(key)  {                           //SINGLE SELECTION
+                    oCombo.push(new Filter({
+                        path : "EMP_DESIG",
+                        operator : FilterOperator.EQ,
+                        value1 : key
+                    }));             
+                    })
+                console.log(oCombo);
             }
             if(oSelectedKeyBranch){
+                oSelectedKeyBranch.forEach(function(key){
                 oCombo.push(new Filter({
                     path : "EMP_BRANCH",
                     operator : FilterOperator.EQ,
-                    value1 : oSelectedKeyBranch
+                    value1 : key
                 }));
+            })
             }
             if(oSelectedKeyGrp){
+                oSelectedKeyGrp.forEach(function(key){
                 oCombo.push(new Filter({
                     path : "EMP_BLODD_GRP",
                     operator : FilterOperator.EQ,
-                    value1 : oSelectedKeyGrp
+                    value1 : key
                 }));
+            })
             }
-            if(oSelectedDesKey && oSelectedKeyBranch){                                        //DOUBLE SELECTION
-                oCombo.push(new Filter({
-                        filters: [
-                          new Filter({
-                            path: 'EMP_DESIG',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedDesKey
-                          }),
-                          new Filter({
-                            path: 'EMP_BRANCH',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedKeyBranch
-                          })
-                        ],
-                        and: true
-                }))
-            }
-            if(oSelectedDesKey && oSelectedKeyGrp){
-                oCombo.push(new Filter({
-                        filters: [
-                          new Filter({
-                            path: 'EMP_DESIG',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedDesKey
-                          }),
-                          new Filter({
-                            path: 'EMP_BLODD_GRP',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedKeyGrp
-                          })
-                        ],
-                        and: true
-                }))
-            }
-            if(oSelectedKeyBranch && oSelectedKeyGrp){
-                oCombo.push(new Filter({
-                        filters: [
-                          new Filter({
-                            path: 'EMP_BRANCH',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedKeyBranch
-                          }),
-                          new Filter({
-                            path: 'EMP_BLODD_GRP',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedKeyGrp
-                          })
-                        ],
-                        and: true
-                }))
-            }
-            if(oSelectedDesKey && oSelectedKeyBranch && oSelectedKeyGrp){                   //TRIPLE SELECTION
-                oCombo.push(new Filter({
-                        filters: [
-                          new Filter({
-                            path: 'EMP_DESIG',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedDesKey
-                          }),
-                          new Filter({
-                            path: 'EMP_BRANCH',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedKeyBranch
-                          }),
-                          new Filter({
-                            path: 'EMP_BLODD_GRP',
-                            operator: FilterOperator.EQ,
-                            value1: oSelectedKeyGrp
-                          })
-                        ],
-                        and: true
-                      }))
-            }
+            // if(oSelectedDesKey && oSelectedKeyBranch){                                        //DOUBLE SELECTION
+            //     oCombo.push(new Filter({
+            //             filters: [
+            //               new Filter({
+            //                 path: 'EMP_DESIG',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedDesKey
+            //               }),
+            //               new Filter({
+            //                 path: 'EMP_BRANCH',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedKeyBranch
+            //               })
+            //             ],
+            //             and: true
+            //     }))
+            // }
+            // if(oSelectedDesKey && oSelectedKeyGrp){
+            //     oCombo.push(new Filter({
+            //             filters: [
+            //               new Filter({
+            //                 path: 'EMP_DESIG',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedDesKey
+            //               }),
+            //               new Filter({
+            //                 path: 'EMP_BLODD_GRP',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedKeyGrp
+            //               })
+            //             ],
+            //             and: true
+            //     }))
+            // }
+            // if(oSelectedKeyBranch && oSelectedKeyGrp){
+            //     oCombo.push(new Filter({
+            //             filters: [
+            //               new Filter({
+            //                 path: 'EMP_BRANCH',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedKeyBranch
+            //               }),
+            //               new Filter({
+            //                 path: 'EMP_BLODD_GRP',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedKeyGrp
+            //               })
+            //             ],
+            //             and: true
+            //     }))
+            // }
+            // if(oSelectedDesKey && oSelectedKeyBranch && oSelectedKeyGrp){                   //TRIPLE SELECTION
+            //     oCombo.push(new Filter({
+            //             filters: [
+            //               new Filter({
+            //                 path: 'EMP_DESIG',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedDesKey
+            //               }),
+            //               new Filter({
+            //                 path: 'EMP_BRANCH',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedKeyBranch
+            //               }),
+            //               new Filter({
+            //                 path: 'EMP_BLODD_GRP',
+            //                 operator: FilterOperator.EQ,
+            //                 value1: oSelectedKeyGrp
+            //               })
+            //             ],
+            //             and: true
+            //           }))
+            // }
             var oTable = that.getView().byId("empTable");
             var oBinding = oTable.getBinding("items");
             oBinding.filter(oCombo);

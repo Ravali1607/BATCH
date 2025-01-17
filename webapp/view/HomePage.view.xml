@@ -15,27 +15,27 @@
         <content>
         <Bar >
             <contentLeft>
-                <ComboBox items="{path : 'designations>/DESIGNATIONS'
+                <MultiComboBox items="{path : 'designations>/DESIGNATIONS'
                 }" 
-                selectionChange="ComboBox" id="comboBoxDes" showClearIcon="true" placeholder="Designation"  enabled="true" >
+                selectionChange="ComboBox" id="comboBoxDes" showClearIcon="true" placeholder="Designation"  enabled="true" width="250px">
                     <items >
                         <core:Item key="{designations>}" text="{designations>}"></core:Item>
                     </items>
-                </ComboBox>
-                <ComboBox items="{path : 'branch>/BRANCH'
+                </MultiComboBox>
+                <MultiComboBox items="{path : 'branch>/BRANCH'
                 }" 
-                selectionChange="ComboBox" id="comboBoxBranch" showClearIcon="true" placeholder="Branch">
+                selectionChange="ComboBox" id="comboBoxBranch" showClearIcon="true" placeholder="Branch" width="250px">
                     <items >
                         <core:Item key="{branch>}" text="{branch>}"></core:Item>
                     </items>
-                </ComboBox>
-                <ComboBox items="{path : 'bloodgroup>/BLOODGROUP'
+                </MultiComboBox>
+                <MultiComboBox items="{path : 'bloodgroup>/BLOODGROUP'
                 }" 
-                selectionChange="ComboBox" id="comboBoxBloodGrp" showClearIcon="true" placeholder="Blood Group">
+                selectionChange="ComboBox" id="comboBoxBloodGrp" showClearIcon="true" placeholder="Blood Group" width="250px">
                     <items >
                         <core:Item key="{bloodgroup>}" text="{bloodgroup>}"></core:Item>
                     </items>
-                </ComboBox>
+                </MultiComboBox>
             </contentLeft>
             <contentRight>
                 <Button icon="sap-icon://add-employee" press="onAddEmp" text="Add"></Button>
