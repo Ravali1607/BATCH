@@ -231,7 +231,7 @@ sap.ui.define([
             that.updateDialog.close();
         },
          // <!------- Deleting multiple employees --------------!>
-         onDeleteEmp1: function(){
+        onDeleteEmp1: function(){
             var oTable = that.getView().byId("empTable");
             var oSelectedItem = oTable.getSelectedItems();
             var oModel = that.getOwnerComponent().getModel();
